@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
+using System.IO;
 
 namespace APIExamples
 {
@@ -21,12 +22,33 @@ namespace APIExamples
         private void button1_Click(object sender, EventArgs e)
         {
             try
-            {
+            {             
+                //  API token is generated at the appliaction, I think a similar example could be made using OATH
                 var APItoken = "NNSXS.5B7SXMCWWX3VLZYCG3L3ODPPSZTIAB6Q2XDAF5Q.SG6FQ3UXGMJTXEVZXLFBCKPHLLR2A23524ZHOYKIPLDP434X3UEA";
-                var request = (HttpWebRequest)WebRequest.Create("https://eu1.cloud.thethings.network/api/v3/applications/" + "kurtstestapplicationca" + "/devices?page=1&limit=5&field_mask=name");
+
+                string application = "kurtstestapplicationca";
+                string enddevice = "eui-000098761234ffff";
+
+                //  Schedule Uplink Message API
+                var request = (HttpWebRequest)WebRequest.Create("https://nam1.cloud.thethings.network/api/v3/as/applications/" + application + "/devices/" + enddevice + "/down/replace");
+                //  Get Device by Name API
+                //var request = (HttpWebRequest)WebRequest.Create("https://eu1.cloud.thethings.network/api/v3/applications/" + "kurtstestapplicationca" + "/devices?page=1&limit=5&field_mask=name");
+                
+                request.Method = "POST";
+                request.ContentType = "application/json; charset=utf-8";
                 request.Headers.Add(HttpRequestHeader.Authorization, string.Concat("Bearer ", APItoken));
                 request.Accept = "application/json";
                 request.UserAgent = "kurtk"; //user agent is required https://developer.github.com/v3/#user-agent-required
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    byte[] data = new byte[] {0 , 1 , 2 , 3, 4};
+                    string payload = Convert.ToBase64String(data);
+                    string json = "{ \"downlinks\":[{ \"frm_payload\":\"" + payload + "\",\"confirmed\":false,\"f_port\":1}]}";
+
+                    streamWriter.Write(json);
+                    streamWriter.Flush();
+                }
+
                 using (var response = request.GetResponse())
                 {
                     WebHeaderCollection header = response.Headers;
