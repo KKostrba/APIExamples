@@ -24,14 +24,14 @@ namespace APIExamples
             try
             {             
                 //  API token is generated at the appliaction, I think a similar example could be made using OATH
-                var APItoken = "NNSXS.5B7SXMCWWX3VLZYCG3L3ODPPSZTIAB6Q2XDAF5Q.SG6FQ3UXGMJTXEVZXLFBCKPHLLR2A23524ZHOYKIPLDP434X3UEA";
+                var APItoken = "NNSXS.B2NKEGQBUGR5WKMJFE6BYBAXLYVXKG7F66WSFBA.OGQ3NP26CYD25VVPXVVEV47KUEZXH5ZM3SDKOOSWHRO5GUFEAEMQ";
 
-                string application = "kurtstestapplicationca";
-                string enddevice = "eui-000098761234ffff";
+                string application = "akkapp";
+                string enddevice = "lab-room-sensor-v1";
 
                 //  Schedule Uplink Message API
                 var request = (HttpWebRequest)WebRequest.Create("https://nam1.cloud.thethings.network/api/v3/as/applications/" + application + "/devices/" + enddevice + "/down/replace");
-                //  Get Device by Name API
+                //  Get Device by Name API (may only work on EU server)
                 //var request = (HttpWebRequest)WebRequest.Create("https://eu1.cloud.thethings.network/api/v3/applications/" + "kurtstestapplicationca" + "/devices?page=1&limit=5&field_mask=name");
                 
                 request.Method = "POST";
